@@ -86,5 +86,5 @@ test_dataloader = val_dataloader
 val_evaluator = dict(ann_file=data_root + 'annotations/instances_val2017.json')
 test_evaluator = val_evaluator
 
-visualization = _base_.default_hooks.visualization
-visualization.update(dict(draw=True, show=True))
+# visualization = _base_.default_hooks.visualization
+# visualization.update(dict(draw=True, show=True))
