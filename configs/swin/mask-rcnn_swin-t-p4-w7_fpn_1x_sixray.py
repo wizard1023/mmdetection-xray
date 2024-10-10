@@ -24,9 +24,37 @@ model = dict(
         with_cp=False,
         convert_weights=True,
         init_cfg=dict(type='Pretrained', checkpoint=pretrained)),
-    neck=dict(in_channels=[96, 192, 384, 768]))
+    neck=dict(in_channels=[96, 192, 384, 768]),
+    roi_head=dict(
+        bbox_head=dict(num_classes=5), mask_head=dict(num_classes=5))
+)
+data_root = '/home/data2/lxm/datasets/SIXray_coco/'
 
-max_epochs = 12
+metainfo = {
+    'classes': ('Gun','Knife','Wrench','Pliers','Scissors')
+}
+
+train_dataloader = dict(
+    num_workers=8,
+    batch_size=4,
+    dataset=dict(
+        data_root=data_root,
+        metainfo=metainfo,
+        ann_file='/home/data2/lxm/datasets/SIXray_coco/annotations/instances_train2017_mask.json',
+        data_prefix=dict(img='/home/data2/lxm/datasets/SIXray_coco/train2017/')))
+val_dataloader = dict(
+    num_workers=8,
+    batch_size=4,
+    dataset=dict(
+        data_root=data_root,
+        metainfo=metainfo,
+        ann_file='/home/data2/lxm/datasets/SIXray_coco/annotations/instances_val2017_mask.json',
+        data_prefix=dict(img='/home/data2/lxm/datasets/SIXray_coco/val2017/')))
+test_dataloader = val_dataloader
+
+val_evaluator = dict(ann_file=data_root + 'annotations/instances_val2017_mask.json')
+test_evaluator = val_evaluator
+max_epochs = 28
 train_cfg = dict(max_epochs=max_epochs)
 
 # learning rate
@@ -57,4 +85,7 @@ optim_wrapper = dict(
         type='AdamW',
         lr=0.0001,
         betas=(0.9, 0.999),
-        weight_decay=0.05))
+        weight_decay=0.05,
+        capturable=True)
+        )
+
