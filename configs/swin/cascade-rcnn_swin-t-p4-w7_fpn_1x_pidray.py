@@ -32,7 +32,7 @@ model = dict(
                 in_channels=256,
                 fc_out_channels=1024,
                 roi_feat_size=7,
-                num_classes=5,
+                num_classes=12,
                 bbox_coder=dict(
                     type='DeltaXYWHBBoxCoder',
                     target_means=[0., 0., 0., 0.],
@@ -49,7 +49,7 @@ model = dict(
                 in_channels=256,
                 fc_out_channels=1024,
                 roi_feat_size=7,
-                num_classes=5,
+                num_classes=12,
                 bbox_coder=dict(
                     type='DeltaXYWHBBoxCoder',
                     target_means=[0., 0., 0., 0.],
@@ -66,7 +66,7 @@ model = dict(
                 in_channels=256,
                 fc_out_channels=1024,
                 roi_feat_size=7,
-                num_classes=5,
+                num_classes=12,
                 bbox_coder=dict(
                     type='DeltaXYWHBBoxCoder',
                     target_means=[0., 0., 0., 0.],
@@ -79,10 +79,11 @@ model = dict(
                 loss_bbox=dict(type='SmoothL1Loss', beta=1.0, loss_weight=1.0))
         ])
 )
-data_root = '/home/data2/lxm/datasets/SIXray_coco/'
+data_root = '/home/xray/HYB/data/PIDray/'
 
 metainfo = {
-    'classes': ('Gun','Knife','Wrench','Pliers','Scissors')
+    'classes': ('Gun','Bullet','Knife','Wrench','Pliers','Powerbank','Baton','Lighter','Sprayer',
+                'Hammer','Scissors','Handcuffs')
 }
 
 train_dataloader = dict(
@@ -91,19 +92,20 @@ train_dataloader = dict(
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='/home/data2/lxm/datasets/SIXray_coco/annotations/instances_train2017_mask.json',
-        data_prefix=dict(img='/home/data2/lxm/datasets/SIXray_coco/train2017/')))
+        ann_file='/home/xray/HYB/data/PIDray/annotations/instances_train2017.json',
+        data_prefix=dict(img='/home/xray/HYB/data/PIDray/train2017/')))
 val_dataloader = dict(
     num_workers=8,
     batch_size=4,
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='/home/data2/lxm/datasets/SIXray_coco/annotations/instances_val2017_mask.json',
-        data_prefix=dict(img='/home/data2/lxm/datasets/SIXray_coco/val2017/')))
+        ann_file='/home/xray/HYB/data/PIDray/annotations/instances_val2017.json',
+        data_prefix=dict(img='/home/xray/HYB/data/PIDray/val2017/')))
+
 test_dataloader = val_dataloader
 
-val_evaluator = dict(ann_file=data_root + 'annotations/instances_val2017_mask.json')
+val_evaluator = dict(ann_file=data_root + 'annotations/instances_val2017.json')
 test_evaluator = val_evaluator
 max_epochs = 24
 train_cfg = dict(max_epochs=max_epochs)
