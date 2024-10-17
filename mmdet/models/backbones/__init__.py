@@ -20,13 +20,10 @@ from .trident_resnet import TridentResNet
 from .resnet_glore import ResNet_GloRe,GloRe_Unit_2D
 from .resnet_latentgnn import ResNet_LatenGNN
 from .resnet_edge import ResNet_Edge
-from .resnet_edge_1 import ResNet_Edge_1
-from .resnet_edge_2 import ResNet_Edge_2
-from .resnet_edge_3 import ResNet_Edge_3
-from .resnet_edge_4 import ResNet_Edge_4
-from .resnet_edge_5 import ResNet_Edge_5
-from .resnet_edge_6 import ResNet_Edge_6
-from .resnet_edge_7 import ResNet_Edge_7
+from .resnet_edge_cbam import ResNet_Edge_cbam
+from .resnet_edge_gcnet import ResNet_Edge_gcnet
+from .resnet_edge_senet import ResNet_Edge_senet
+from .resnet_edge_nonlocal import ResNet_Edge_nonlocal
 from .ssd_vgg_DOAM import SSDVGG_DOAM
 from .DOAM.DOMA import DOAM
 from .resnet_material import ResNet_Material
@@ -53,6 +50,10 @@ from .resnet_edge_material_8_cbam import ResNet_Edge_Material_8_CBAM
 from .resnet_edge_material_8_nonlocal import ResNet_Edge_Material_8_Nonlocal
 from .resnet_edge_material_8_gcnet import ResNet_Edge_Material_8_GCNet
 from .resnet_edge_material_8_sknet import ResNet_Edge_Material_8_SKNet
+from .resnet_density_cat import ResNet_Density_cat
+from .resnet_density_add import ResNet_Density_add
+from .resnet_hsv_cat import ResNet_hsv_cat
+from .resnet_density import ResNet_Density
 
 __all__ = [
     'RegNet', 'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet',
@@ -60,8 +61,10 @@ __all__ = [
     'DetectoRS_ResNeXt', 'Darknet', 'ResNeSt', 'TridentResNet', 'CSPDarknet',
     'SwinTransformer', 'PyramidVisionTransformer',
     'PyramidVisionTransformerV2', 'EfficientNet', 'CSPNeXt',
-    'ResNet_GloRe','GloRe_Unit_2D','ResNet_LatenGNN','ResNet_Edge','ResNet_Edge_1','ResNet_Edge_2','ResNet_Edge_3',
-    'ResNet_Edge_4','ResNet_Edge_5','ResNet_Edge_6',
+    'ResNet_GloRe','GloRe_Unit_2D','ResNet_LatenGNN','ResNet_Edge','ResNet_Edge_cbam','ResNet_Edge_gcnet','ResNet_Edge_nonlocal',
+    'ResNet_Edge_senet',
+    'ResNet_Density_cat','ResNet_Density_add','ResNet_hsv_cat',
+    'ResNet_Density',
     'SSDVGG_DOAM','DOAM','ResNet_Material','ResNet_Edge_Material','ResNet_Edge_Material_1',
     'ResNet_Edge_Material_8','ResNet_Edge_Material_9',
     'ResNet_Material_1','ResNet_Material_2','ResNet_Material_3',

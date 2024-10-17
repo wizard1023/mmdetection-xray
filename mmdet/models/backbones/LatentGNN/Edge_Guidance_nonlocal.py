@@ -4,10 +4,10 @@ import torch.nn as nn
 import numpy as np
 import torch
 from mmdet.models.backbones.LatentGNN.LatentGNN import LatentGNNV1
-from mmdet.models.backbones.LatentGNN.GCNet import ContextBlock
-class Edge_Guidance_gcnet(nn.Module):
+from mmdet.models.backbones.LatentGNN.non_local import _NonLocalBlockND
+class Edge_Guidance_nonlocal(nn.Module):
     def __init__(self):
-        super(Edge_Guidance_gcnet, self).__init__()
+        super(Edge_Guidance_nonlocal, self).__init__()
         # horizontal
         kernel_const_hori = np.array([[[-1, -2, -1], [0, 0, 0], [1, 2, 1]]], dtype='float32')
         kernel_const_hori = torch.cuda.FloatTensor(kernel_const_hori).unsqueeze(0)
@@ -22,7 +22,7 @@ class Edge_Guidance_gcnet(nn.Module):
         self.conv2 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1) # /4
         #
         self.conv3 = nn.Conv2d(256, 512, kernel_size=3,stride=2, padding=1) # /8
-        self.latent_gnn1 = ContextBlock(inplanes=512,ratio=2)
+        self.latent_gnn1 = _NonLocalBlockND(in_channels=512)
 
         # self.latent_gnn1 = LatentGNNV1(in_channels=512,
         #                                latent_dims=[100, 100],
@@ -32,7 +32,7 @@ class Edge_Guidance_gcnet(nn.Module):
         #                                graph_conv_flag=False)
 
         self.conv4 = nn.Conv2d(512, 1024, kernel_size=3, stride=2, padding=1)  # /16
-        self.latent_gnn2 = ContextBlock(inplanes=1024,ratio=2)
+        self.latent_gnn2 = _NonLocalBlockND(in_channels=1024)
         # self.latent_gnn2 = LatentGNNV1(in_channels=1024,
         #                                latent_dims=[100, 100],
         #                                channel_stride=8,
@@ -88,7 +88,7 @@ if __name__ == "__main__":
            torch.rand(1,512,80,80).to("cuda:0"),
            torch.rand(1,1024,40,40).to("cuda:0"),
            torch.rand(1,2048,20,20).to("cuda:0")]
-    model = Edge_Guidance_gcnet().to("cuda:0")
+    model = Edge_Guidance_nonlocal().to("cuda:0")
     outs = model(img,feat)
     # edge_detect = edge_detect.squeeze(0).cpu().numpy()
     # image = np.transpose(edge_detect, (1, 2, 0))

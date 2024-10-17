@@ -5,13 +5,13 @@ import torch.nn.functional as F
 import numpy as np
 from mmdet.models.backbones import ResNet
 from mmdet.registry import MODELS
-from mmdet.models.backbones.LatentGNN.Edge_Guidance import Edge_Guidance
+from mmdet.models.backbones.LatentGNN.Edge_Guidance_cbam import Edge_Guidance_cbam
 
 @MODELS.register_module()
-class ResNet_Edge(ResNet):
+class ResNet_Edge_cbam(ResNet):
     def __init__(self, **kwargs):
-        super(ResNet_Edge, self).__init__(**kwargs)
-        self.edge_guidance = Edge_Guidance()
+        super(ResNet_Edge_cbam, self).__init__(**kwargs)
+        self.edge_guidance = Edge_Guidance_cbam()
 
     def forward(self, x):
         origin_img = x

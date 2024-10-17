@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class Density_Guidance_cat(nn.Module):
+class Density_Guidance_add(nn.Module):
     def __init__(self):
-        super(Density_Guidance_cat, self).__init__()
+        super(Density_Guidance_add, self).__init__()
 
         # hsv backbone
         self.conv_128 = nn.Sequential(
@@ -29,22 +29,22 @@ class Density_Guidance_cat(nn.Module):
             nn.ReLU())  # /2
 
         # 削减通道维度
-        self.down_ch_1 = nn.Sequential(
-            nn.Conv2d(512, 256, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(256),
-            nn.ReLU())
-        self.down_ch_2 = nn.Sequential(
-            nn.Conv2d(1024, 512, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.down_ch_3 = nn.Sequential(
-            nn.Conv2d(2048, 1024, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(1024),
-            nn.ReLU())
-        self.down_ch_4 = nn.Sequential(
-            nn.Conv2d(4096, 2048, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(2048),
-            nn.ReLU())
+        # self.down_ch_1 = nn.Sequential(
+        #     nn.Conv2d(512, 256, kernel_size=1, stride=1, padding=0),
+        #     nn.BatchNorm2d(256),
+        #     nn.ReLU())
+        # self.down_ch_2 = nn.Sequential(
+        #     nn.Conv2d(1024, 512, kernel_size=1, stride=1, padding=0),
+        #     nn.BatchNorm2d(512),
+        #     nn.ReLU())
+        # self.down_ch_3 = nn.Sequential(
+        #     nn.Conv2d(2048, 1024, kernel_size=1, stride=1, padding=0),
+        #     nn.BatchNorm2d(1024),
+        #     nn.ReLU())
+        # self.down_ch_4 = nn.Sequential(
+        #     nn.Conv2d(4096, 2048, kernel_size=1, stride=1, padding=0),
+        #     nn.BatchNorm2d(2048),
+        #     nn.ReLU())
 
     def rgb2hsv_torch(self, rgb: torch.Tensor):
         cmax, cmax_idx = torch.max(rgb, dim=1, keepdim=True)
@@ -76,12 +76,13 @@ class Density_Guidance_cat(nn.Module):
         hsv_outs.append(hsv_1024)
         hsv_outs.append(hsv_2048)
 
-        fusion_outs = [torch.cat((feat[i], hsv_outs[i]), dim=1) for i in range(len(hsv_outs))]
-        outs = []
-        outs.append(self.down_ch_1(fusion_outs[0]))
-        outs.append(self.down_ch_2(fusion_outs[1]))
-        outs.append(self.down_ch_3(fusion_outs[2]))
-        outs.append(self.down_ch_4(fusion_outs[3]))
+        outs = [feat[i]+hsv_outs[i] for i in range(len(hsv_outs))]
+        # fusion_outs = [torch.cat((feat[i], hsv_outs[i]), dim=1) for i in range(len(hsv_outs))]
+        # outs = []
+        # outs.append(self.down_ch_1(fusion_outs[0]))
+        # outs.append(self.down_ch_2(fusion_outs[1]))
+        # outs.append(self.down_ch_3(fusion_outs[2]))
+        # outs.append(self.down_ch_4(fusion_outs[3]))
 
         return outs
 
@@ -95,6 +96,6 @@ if __name__=='__main__':
             torch.rand(2, 512, 80, 80).to("cuda:2"),
             torch.rand(2, 1024, 40, 40).to("cuda:2"),
             torch.rand(2, 2048, 20, 20).to("cuda:2")]
-    model = Density_Guidance_cat().to("cuda:2")
+    model = Density_Guidance_add().to("cuda:2")
     outs = model(img, feat)
     print([i.shape for i in outs])

@@ -6,7 +6,7 @@ _base_ = [
 
 model = dict(
     backbone=dict(
-                type='ResNet_Edge_gcnet',
+                type='ResNet_Edge_nonlocal',
                 depth=50,
                 num_stages=4,
                 out_indices=(0, 1, 2, 3),

@@ -16,8 +16,7 @@ class CocoDataset(BaseDetDataset):
 
     METAINFO = {
         'classes':
-            ('Gun','Bullet','Knife','Wrench','Pliers','Powerbank','Baton','Lighter','Sprayer',
-                'Hammer','Scissors','Handcuffs'),
+            ('Gun','Knife','Wrench','Pliers','Scissors'),
         # 'classes':
         # ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train',
         #  'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign',

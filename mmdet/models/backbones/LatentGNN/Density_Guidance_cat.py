@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class Density_Guidance(nn.Module):
+class Density_Guidance_cat(nn.Module):
     def __init__(self):
-        super(Density_Guidance, self).__init__()
+        super(Density_Guidance_cat, self).__init__()
 
         # hsv backbone
         self.conv_128 = nn.Sequential(
@@ -95,6 +95,6 @@ if __name__=='__main__':
             torch.rand(2, 512, 80, 80).to("cuda:2"),
             torch.rand(2, 1024, 40, 40).to("cuda:2"),
             torch.rand(2, 2048, 20, 20).to("cuda:2")]
-    model = Density_Guidance().to("cuda:2")
+    model = Density_Guidance_cat().to("cuda:2")
     outs = model(img, feat)
     print([i.shape for i in outs])

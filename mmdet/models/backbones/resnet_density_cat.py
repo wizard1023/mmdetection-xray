@@ -5,16 +5,16 @@ import torch.nn.functional as F
 import numpy as np
 from mmdet.models.backbones import ResNet
 from mmdet.registry import MODELS
-from mmdet.models.backbones.LatentGNN.Material_Guidance import Material_Guidance
+from mmdet.models.backbones.LatentGNN.Density_Guidance_cat import Density_Guidance_cat
 
 @MODELS.register_module()
-class ResNet_Material(ResNet):
+class ResNet_Density_cat(ResNet):
     def __init__(self, **kwargs):
-        super(ResNet_Material, self).__init__(**kwargs)
-        self.material_guidance = Material_Guidance(dims=[256, 512, 1024, 2048])
+        super(ResNet_Density_cat, self).__init__(**kwargs)
+        self.material_guidance = Density_Guidance_cat()
 
     def forward(self, x):
-
+        origin_img = x
         if self.deep_stem:
             x = self.stem(x)
         else:
@@ -28,7 +28,7 @@ class ResNet_Material(ResNet):
             x = res_layer(x)
             if i in self.out_indices:
                 outs.append(x)
-        outs = self.material_guidance(outs)
+        outs = self.material_guidance(origin_img, outs)
         return tuple(outs)
 
 

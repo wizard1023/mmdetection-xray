@@ -6,7 +6,7 @@ _base_ = [
 
 model = dict(
     backbone=dict(
-                type='ResNet_Edge_Material_8',
+                type='ResNet_Density_cat',
                 depth=50,
                 num_stages=4,
                 out_indices=(0, 1, 2, 3),
@@ -77,7 +77,7 @@ metainfo = {
 
 train_dataloader = dict(
     num_workers=8,
-    batch_size=2,
+    batch_size=4,
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
@@ -85,7 +85,7 @@ train_dataloader = dict(
         data_prefix=dict(img='/home/data2/lxm/datasets/SIXray_coco/train2017/')))
 val_dataloader = dict(
     num_workers=8,
-    batch_size=1,
+    batch_size=4,
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,

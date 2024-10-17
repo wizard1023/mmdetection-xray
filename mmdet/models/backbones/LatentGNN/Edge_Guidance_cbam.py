@@ -4,9 +4,10 @@ import torch.nn as nn
 import numpy as np
 import torch
 from mmdet.models.backbones.LatentGNN.LatentGNN import LatentGNNV1
-class Edge_Guidance(nn.Module):
+from mmdet.models.backbones.LatentGNN.CBAM import CBAM
+class Edge_Guidance_cbam(nn.Module):
     def __init__(self):
-        super(Edge_Guidance, self).__init__()
+        super(Edge_Guidance_cbam, self).__init__()
         # horizontal
         kernel_const_hori = np.array([[[-1, -2, -1], [0, 0, 0], [1, 2, 1]]], dtype='float32')
         kernel_const_hori = torch.cuda.FloatTensor(kernel_const_hori).unsqueeze(0)
@@ -21,20 +22,23 @@ class Edge_Guidance(nn.Module):
         self.conv2 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1) # /4
         #
         self.conv3 = nn.Conv2d(256, 512, kernel_size=3,stride=2, padding=1) # /8
-        self.latent_gnn1 = LatentGNNV1(in_channels=512,
-                                       latent_dims=[100, 100],
-                                       channel_stride=8,
-                                       num_kernels=2,
-                                       mode='asymmetric',
-                                       graph_conv_flag=False)
+        self.latent_gnn1 = CBAM(gate_channels=512)
+
+        # self.latent_gnn1 = LatentGNNV1(in_channels=512,
+        #                                latent_dims=[100, 100],
+        #                                channel_stride=8,
+        #                                num_kernels=2,
+        #                                mode='asymmetric',
+        #                                graph_conv_flag=False)
 
         self.conv4 = nn.Conv2d(512, 1024, kernel_size=3, stride=2, padding=1)  # /16
-        self.latent_gnn2 = LatentGNNV1(in_channels=1024,
-                                       latent_dims=[100, 100],
-                                       channel_stride=8,
-                                       num_kernels=2,
-                                       mode='asymmetric',
-                                       graph_conv_flag=False)
+        self.latent_gnn2 = CBAM(gate_channels=1024)
+        # self.latent_gnn2 = LatentGNNV1(in_channels=1024,
+        #                                latent_dims=[100, 100],
+        #                                channel_stride=8,
+        #                                num_kernels=2,
+        #                                mode='asymmetric',
+        #                                graph_conv_flag=False)
 
         self.conv5 = nn.Conv2d(1024, 2048, kernel_size=3, stride=2, padding=1) # /32
 
@@ -84,7 +88,7 @@ if __name__ == "__main__":
            torch.rand(1,512,80,80).to("cuda:0"),
            torch.rand(1,1024,40,40).to("cuda:0"),
            torch.rand(1,2048,20,20).to("cuda:0")]
-    model = Edge_Guidance().to("cuda:0")
+    model = Edge_Guidance_cbam().to("cuda:0")
     outs = model(img,feat)
     # edge_detect = edge_detect.squeeze(0).cpu().numpy()
     # image = np.transpose(edge_detect, (1, 2, 0))
