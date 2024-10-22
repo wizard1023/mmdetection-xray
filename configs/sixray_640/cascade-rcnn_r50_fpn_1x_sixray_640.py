@@ -67,7 +67,7 @@ metainfo = {
 
 train_dataloader = dict(
     num_workers=8,
-    batch_size=4,
+    batch_size=8,
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
@@ -75,7 +75,7 @@ train_dataloader = dict(
         data_prefix=dict(img='/home/data2/lxm/datasets/SIXray_coco/train2017/')))
 val_dataloader = dict(
     num_workers=8,
-    batch_size=4,
+    batch_size=8,
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
