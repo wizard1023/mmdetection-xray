@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import warnings
-
+import torch
 import torch.nn as nn
 import torch.utils.checkpoint as cp
 from mmcv.cnn import build_conv_layer, build_norm_layer, build_plugin_layer
@@ -630,6 +630,9 @@ class ResNet(BaseModule):
 
     def forward(self, x):
         """Forward function."""
+        # print(x.shape)
+        # torch.set_printoptions(threshold=torch.inf)
+        # print(x)
         if self.deep_stem:
             x = self.stem(x)
         else:

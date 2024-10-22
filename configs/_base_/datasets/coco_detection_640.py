@@ -16,17 +16,22 @@ data_root = 'data/coco/'
 #         'data/': 's3://openmmlab/datasets/detection/'
 #     }))
 backend_args = None
-
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', scale=(640, 640), keep_ratio=False),
+    dict(type='Resize', scale=(640, 640), keep_ratio=True),
     dict(type='RandomFlip', prob=0.5),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=640),
     dict(type='PackDetInputs')
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
     dict(type='Resize', scale=(640, 640), keep_ratio=True),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=640),
     # If you don't have a gt annotation, delete the pipeline
     dict(type='LoadAnnotations', with_bbox=True),
     dict(

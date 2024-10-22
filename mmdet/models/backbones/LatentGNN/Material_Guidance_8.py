@@ -102,6 +102,8 @@ class Material_Guidance_8(nn.Module):
 
     def forward(self, im, feat):
         hsv_outs = []
+        # torch.set_printoptions(threshold=torch.inf)
+        # print(im)
         hsv = self.rgb2hsv_torch(im)
 
         hsv_128 = self.conv_128(hsv)

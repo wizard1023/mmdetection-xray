@@ -1,20 +1,10 @@
 _base_ = [
     '../_base_/models/cascade-rcnn_r50_fpn.py',
-    '../_base_/datasets/coco_detection.py',
+    '../_base_/datasets/coco_detection_640.py',
     '../_base_/schedules/schedule_cascade_rcnn.py', '../_base_/default_runtime.py'
 ]
 
 model = dict(
-    backbone=dict(
-                type='ResNet_Density',
-                depth=50,
-                num_stages=4,
-                out_indices=(0, 1, 2, 3),
-                frozen_stages=1,
-                norm_cfg=dict(type='BN', requires_grad=True),
-                norm_eval=True,
-                style='pytorch',
-                init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
     roi_head=dict(
         bbox_head=[
             dict(
@@ -96,11 +86,5 @@ test_dataloader = val_dataloader
 val_evaluator = dict(ann_file=data_root + 'annotations/instances_val2017.json')
 test_evaluator = val_evaluator
 
-optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
-optimizer_config = dict(grad_clip=None)
-lr_config = dict(
-    policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=0.001,
-    step=[8, 11])
+# visualization = _base_.default_hooks.visualization
+# visualization.update(dict(draw=True, show=True))

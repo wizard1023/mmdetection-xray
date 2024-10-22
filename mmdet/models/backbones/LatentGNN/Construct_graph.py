@@ -60,6 +60,7 @@ def neighbor_25(i, c_shape):
 
 def build_edges(g, c3_shape=40, c4_shape=20, c5_shape=10):
     c3_size, c4_size, c5_size = c3_shape * c3_shape, c4_shape * c4_shape, c5_shape * c5_shape
+    # c3_size, c4_size, c5_size = 4200, 1050, 273
     c3 = torch.arange(0, c3_size)
     c4 = torch.arange(c3_size, c3_size + c4_size)
     c5 = torch.arange(c3_size + c4_size, c3_size + c4_size + c5_size)
@@ -144,9 +145,13 @@ def gnn_cnn(g):
     pixel_data = g.ndata["pixel"]
 
     # p3, p4 和 p5 层的 reshape 操作
-    p3 = torch.reshape(pixel_data[:1600], (1, 40, 40, 256))  # 28*28 = 784
-    p4 = torch.reshape(pixel_data[1600:2000], (1, 20, 20, 256))  # 14*14 = 196
-    p5 = torch.reshape(pixel_data[2000:2100], (1, 10, 10, 256))  # 7*7 = 49
+    # p3 = torch.reshape(pixel_data[:1600], (1, 40, 40, 256))  # 28*28 = 784
+    # p4 = torch.reshape(pixel_data[1600:2000], (1, 20, 20, 256))  # 14*14 = 196
+    # p5 = torch.reshape(pixel_data[2000:2100], (1, 10, 10, 256))  # 7*7 = 49
+
+    p3 = torch.reshape(pixel_data[:4200], (1, 50, 84, 256))  # 28*28 = 784
+    p4 = torch.reshape(pixel_data[4200:5250], (1, 25, 42, 256))  # 14*14 = 196
+    p5 = torch.reshape(pixel_data[5250:5523], (1, 13, 21, 256))  # 7*7 = 49
 
     return p3, p4, p5
 

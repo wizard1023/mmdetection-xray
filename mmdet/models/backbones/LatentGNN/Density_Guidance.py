@@ -49,8 +49,14 @@ class Density_Guidance(nn.Module):
         self.avgpool2 = nn.AdaptiveAvgPool2d(output_size=(20, 20))
         self.avgpool3 = nn.AdaptiveAvgPool2d(output_size=(10, 10))
 
+        # self.avgpool1 = nn.AdaptiveAvgPool2d(output_size=(50, 84))
+        # self.avgpool2 = nn.AdaptiveAvgPool2d(output_size=(25, 42))
+        # self.avgpool3 = nn.AdaptiveAvgPool2d(output_size=(13, 21))
+
         # 图
         self.g = simple_birected(build_edges(heterograph("pixel", 256, 2100)))
+        # self.g = simple_birected(build_edges(heterograph("pixel", 256, 5523)))
+
         self.g = dgl.add_self_loop(self.g, etype="hierarchical")
         self.g = dgl.add_self_loop(self.g, etype="contextual")
         self.subg_h = hetero_subgraph(self.g, "hierarchical")
@@ -75,10 +81,10 @@ class Density_Guidance(nn.Module):
 
 
     def forward(self,feat):
-        # print(f'0:{feat[0].shape}')
-        # print(f'1:{feat[1].shape}')
-        # print(f'2:{feat[2].shape}')
-        # print(f'3:{feat[3].shape}')
+        print(f'0:{feat[0].shape}')
+        print(f'1:{feat[1].shape}')
+        print(f'2:{feat[2].shape}')
+        print(f'3:{feat[3].shape}')
 
         outs = []
 
