@@ -6,7 +6,7 @@ _base_ = [
 
 model = dict(
     backbone=dict(
-                type='ResNet_Multiscale_2',
+                type='ResNet_Multiscale_3',
                 depth=50,
                 num_stages=4,
                 out_indices=(0, 1, 2, 3),

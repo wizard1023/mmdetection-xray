@@ -4,9 +4,9 @@ import torch
 
 import torch.nn.functional as F
 
-class Multiscale_2(nn.Module):
+class Multiscale_3(nn.Module):
     def __init__(self):
-        super(Multiscale_2, self).__init__()
+        super(Multiscale_3, self).__init__()
 
         # for level_3
         # self.dilated_conv_3_1 = nn.Sequential(
@@ -17,15 +17,11 @@ class Multiscale_2(nn.Module):
         #     nn.Conv2d(512, 2048, kernel_size=3, stride=2, padding=2, dilation=2),
         #     nn.BatchNorm2d(2048),
         #     nn.ReLU())
-        self.dilated_conv_3_3 = nn.Sequential(
-            nn.Conv2d(1024, 2048, kernel_size=3, stride=2, padding=2, dilation=2),
-            nn.BatchNorm2d(2048),
-            nn.ReLU())
+        self.dilated_conv_3_3 = nn.Conv2d(1024, 2048, kernel_size=3, stride=2, padding=2, dilation=2)
 
-        self.weight_3_0 = nn.Sequential(
-            nn.Conv2d(2048,8,kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
+
+        self.weight_3_0 = nn.Conv2d(2048,8,kernel_size=1)
+
         # self.weight_3_1 = nn.Sequential(
         #     nn.Conv2d(2048,8,kernel_size=1),
         #     nn.BatchNorm2d(8),
@@ -34,87 +30,58 @@ class Multiscale_2(nn.Module):
         #     nn.Conv2d(2048,8,kernel_size=1),
         #     nn.BatchNorm2d(8),
         #     nn.ReLU())
-        self.weight_3_3 = nn.Sequential(
-            nn.Conv2d(2048,8,kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
+        self.weight_3_3 = nn.Conv2d(2048,8,kernel_size=1)
 
-        self.weight_levels_3 = nn.Sequential(
-            nn.Conv2d(8 * 2, 2, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(2),
-            nn.ReLU())
+        self.weight_levels_3 = nn.Conv2d(8 * 2, 2, kernel_size=1, stride=1, padding=0)
+
 
         # for level_2
-        self.conv_1 = nn.Sequential(
-            nn.Conv2d(2048,1024,kernel_size=1),
-            nn.BatchNorm2d(1024),
-            nn.ReLU())
-        self.dilated_conv_2_1 = nn.Sequential(
-            nn.Conv2d(512, 1024, kernel_size=3, stride=2, padding=2, dilation=2),
-            nn.BatchNorm2d(1024),
-            nn.ReLU())
+        self.conv_1 = nn.Conv2d(2048,1024,kernel_size=1)
+
+        self.dilated_conv_2_1 = nn.Conv2d(512, 1024, kernel_size=3, stride=2, padding=2, dilation=2)
+
         # self.dilated_conv_2_2 = nn.Sequential(
         #     nn.Conv2d(256,1024, kernel_size=3, stride=2, padding=2, dilation=2),
         #     nn.BatchNorm2d(1024),
         #     nn.ReLU())
 
-        self.weight_2_0 = nn.Sequential(
-            nn.Conv2d(1024, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
-        self.weight_2_1 = nn.Sequential(
-            nn.Conv2d(1024, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
+        self.weight_2_0 = nn.Conv2d(1024, 8, kernel_size=1)
+
+        self.weight_2_1 = nn.Conv2d(1024, 8, kernel_size=1)
+
         # self.weight_2_2 = nn.Sequential(
         #     nn.Conv2d(1024, 8, kernel_size=1),
         #     nn.BatchNorm2d(8),
         #     nn.ReLU())
-        self.weight_2_3 = nn.Sequential(
-            nn.Conv2d(1024, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
+        self.weight_2_3 = nn.Conv2d(1024, 8, kernel_size=1)
 
-        self.weight_levels_2 = nn.Sequential(
-            nn.Conv2d(8 * 3, 3, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(3),
-            nn.ReLU())
+
+        self.weight_levels_2 =nn.Conv2d(8 * 3, 3, kernel_size=1, stride=1, padding=0)
+
 
         # for level_1
         # self.conv_2 = nn.Sequential(
         #     nn.Conv2d(2048,512,kernel_size=1),
         #     nn.BatchNorm2d(512),
         #     nn.ReLU())
-        self.conv_3 = nn.Sequential(
-            nn.Conv2d(1024, 512, kernel_size=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.dilated_conv_1_1 = nn.Sequential(
-            nn.Conv2d(256,512, kernel_size=3, stride=2, padding=2, dilation=2),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
+        self.conv_3 =nn.Conv2d(1024, 512, kernel_size=1)
+
+        self.dilated_conv_1_1 = nn.Conv2d(256,512, kernel_size=3, stride=2, padding=2, dilation=2)
+
 
         # self.weight_1_0 = nn.Sequential(
         #     nn.Conv2d(512, 8, kernel_size=1),
         #     nn.BatchNorm2d(8),
         #     nn.ReLU())
-        self.weight_1_1 = nn.Sequential(
-            nn.Conv2d(512, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
-        self.weight_1_2 = nn.Sequential(
-            nn.Conv2d(512, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
-        self.weight_1_3 = nn.Sequential(
-            nn.Conv2d(512, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
+        self.weight_1_1 = nn.Conv2d(512, 8, kernel_size=1)
 
-        self.weight_levels_1 = nn.Sequential(
-            nn.Conv2d(8 * 3, 3, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(3),
-            nn.ReLU())
+        self.weight_1_2 =  nn.Conv2d(512, 8, kernel_size=1)
+
+        self.weight_1_3 = nn.Conv2d(512, 8, kernel_size=1)
+
+
+        self.weight_levels_1 = nn.Conv2d(8 * 3, 3, kernel_size=1, stride=1, padding=0)
+
 
         # for level_0
         # self.conv_4 = nn.Sequential(
@@ -125,10 +92,8 @@ class Multiscale_2(nn.Module):
         #     nn.Conv2d(1024,256,kernel_size=1),
         #     nn.BatchNorm2d(256),
         #     nn.ReLU())
-        self.conv_6 = nn.Sequential(
-            nn.Conv2d(512,256,kernel_size=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU())
+        self.conv_6 =nn.Conv2d(512,256,kernel_size=1)
+
 
         # self.weight_0_0 = nn.Sequential(
         #     nn.Conv2d(256, 8, kernel_size=1),
@@ -138,19 +103,11 @@ class Multiscale_2(nn.Module):
         #     nn.Conv2d(256, 8, kernel_size=1),
         #     nn.BatchNorm2d(8),
         #     nn.ReLU())
-        self.weight_0_2 = nn.Sequential(
-            nn.Conv2d(256, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
-        self.weight_0_3 = nn.Sequential(
-            nn.Conv2d(256, 8, kernel_size=1),
-            nn.BatchNorm2d(8),
-            nn.ReLU())
+        self.weight_0_2 = nn.Conv2d(256, 8, kernel_size=1)
 
-        self.weight_levels_0 = nn.Sequential(
-            nn.Conv2d(8 * 2, 2, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm2d(2),
-            nn.ReLU())
+        self.weight_0_3 =nn.Conv2d(256, 8, kernel_size=1)
+
+        self.weight_levels_0 =nn.Conv2d(8 * 2, 2, kernel_size=1, stride=1, padding=0)
 
 
     def forward(self,feat):
@@ -249,7 +206,7 @@ if __name__=='__main__':
             torch.rand(2, 512, 80, 80).to("cuda:2"),
             torch.rand(2, 1024, 40, 40).to("cuda:2"),
             torch.rand(2, 2048, 20, 20).to("cuda:2")]
-    model = Multiscale_2().to("cuda:2")
+    model = Multiscale_3().to("cuda:2")
     outs = model(feat)
     print([i.shape for i in outs])
 

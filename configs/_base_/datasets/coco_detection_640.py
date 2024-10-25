@@ -21,17 +21,17 @@ img_norm_cfg = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', scale=(640, 640), keep_ratio=True),
+    dict(type='Resize', scale=(640, 640), keep_ratio=False),
     dict(type='RandomFlip', prob=0.5),
-    dict(type='Normalize', **img_norm_cfg),
-    dict(type='Pad', size_divisor=640),
+    # dict(type='Normalize', **img_norm_cfg),
+    # dict(type='Pad', size_divisor=640),
     dict(type='PackDetInputs')
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
-    dict(type='Resize', scale=(640, 640), keep_ratio=True),
-    dict(type='Normalize', **img_norm_cfg),
-    dict(type='Pad', size_divisor=640),
+    dict(type='Resize', scale=(640, 640), keep_ratio=False),
+    # dict(type='Normalize', **img_norm_cfg),
+    # dict(type='Pad', size_divisor=640),
     # If you don't have a gt annotation, delete the pipeline
     dict(type='LoadAnnotations', with_bbox=True),
     dict(

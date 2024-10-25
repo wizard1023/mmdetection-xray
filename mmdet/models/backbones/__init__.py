@@ -54,6 +54,10 @@ from .resnet_density_cat import ResNet_Density_cat
 from .resnet_density_add import ResNet_Density_add
 from .resnet_hsv_cat import ResNet_hsv_cat
 from .resnet_density import ResNet_Density
+from .resnet_multiscale import ResNet_Multiscale
+from .resnet_multiscale_1 import ResNet_Multiscale_1
+from .resnet_multiscale_2 import ResNet_Multiscale_2
+from .resnet_multiscale_3 import ResNet_Multiscale_3
 
 __all__ = [
     'RegNet', 'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet',
@@ -65,6 +69,7 @@ __all__ = [
     'ResNet_Edge_senet',
     'ResNet_Density_cat','ResNet_Density_add','ResNet_hsv_cat',
     'ResNet_Density',
+    'ResNet_Multiscale','ResNet_Multiscale_1','ResNet_Multiscale_2','ResNet_Multiscale_3',
     'SSDVGG_DOAM','DOAM','ResNet_Material','ResNet_Edge_Material','ResNet_Edge_Material_1',
     'ResNet_Edge_Material_8','ResNet_Edge_Material_9',
     'ResNet_Material_1','ResNet_Material_2','ResNet_Material_3',

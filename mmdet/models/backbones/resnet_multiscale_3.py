@@ -1,13 +1,13 @@
 
 from mmdet.models.backbones import ResNet
 from mmdet.registry import MODELS
-from mmdet.models.backbones.LatentGNN.Multiscale_2 import Multiscale_2
+from mmdet.models.backbones.LatentGNN.Multiscale_3 import Multiscale_3
 
 @MODELS.register_module()
-class ResNet_Multiscale_2(ResNet):
+class ResNet_Multiscale_3(ResNet):
     def __init__(self, **kwargs):
-        super(ResNet_Multiscale_2, self).__init__(**kwargs)
-        self.multiscale = Multiscale_2()
+        super(ResNet_Multiscale_3, self).__init__(**kwargs)
+        self.multiscale = Multiscale_3()
 
     def forward(self, x):
 
@@ -39,10 +39,10 @@ if __name__ == "__main__":
     # print(str(network))
     # output = network(dump_inputs)
     # print(output.shape)
-    from mmdet.models import ResNet_Multiscale_2
+    from mmdet.models import ResNet_Multiscale_3
     import torch
 
-    self = ResNet_Multiscale_2(depth=50)
+    self = ResNet_Multiscale_3(depth=50)
     self.eval()
     inputs = torch.rand(1, 3, 32, 32)
     level_outputs = self.forward(inputs)

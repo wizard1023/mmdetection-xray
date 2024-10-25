@@ -1,20 +1,16 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
-import numpy as np
 from mmdet.models.backbones import ResNet
 from mmdet.registry import MODELS
-from mmdet.models.backbones.LatentGNN.Edge_Guidance import Edge_Guidance
+from mmdet.models.backbones.LatentGNN.Multiscale import Multiscale
 
 @MODELS.register_module()
-class ResNet_Edge(ResNet):
+class ResNet_Multiscale(ResNet):
     def __init__(self, **kwargs):
-        super(ResNet_Edge, self).__init__(**kwargs)
-        self.edge_guidance = Edge_Guidance()
+        super(ResNet_Multiscale, self).__init__(**kwargs)
+        self.multiscale = Multiscale()
 
     def forward(self, x):
-        origin_img = x
+
         if self.deep_stem:
             x = self.stem(x)
         else:
@@ -28,7 +24,7 @@ class ResNet_Edge(ResNet):
             x = res_layer(x)
             if i in self.out_indices:
                 outs.append(x)
-        outs = self.edge_guidance(origin_img, outs)
+        outs = self.multiscale(outs)
         return tuple(outs)
 
 
@@ -43,10 +39,10 @@ if __name__ == "__main__":
     # print(str(network))
     # output = network(dump_inputs)
     # print(output.shape)
-    from mmdet.models import ResNet_Edge
+    from mmdet.models import ResNet_Multiscale
     import torch
 
-    self = ResNet_Edge(depth=50)
+    self = ResNet_Multiscale(depth=50)
     self.eval()
     inputs = torch.rand(1, 3, 32, 32)
     level_outputs = self.forward(inputs)
