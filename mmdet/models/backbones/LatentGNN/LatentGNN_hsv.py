@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 
-class LatentGNNV1(nn.Module):
+class LatentGNNV1_hsv(nn.Module):
     """
     Latent Graph Neural Network for Non-local Relations Learning
 
@@ -26,7 +26,7 @@ class LatentGNNV1(nn.Module):
                  mode='asymmetric', without_residual=False,
                  norm_layer=nn.BatchNorm2d, norm_func=F.normalize,
                  graph_conv_flag=False):
-        super(LatentGNNV1, self).__init__()
+        super(LatentGNNV1_hsv, self).__init__()
         self.without_resisual = without_residual
         self.num_kernels = num_kernels
         self.mode = mode
@@ -49,6 +49,13 @@ class LatentGNNV1(nn.Module):
                           kernel_size=1, padding=0, bias=False),
                 norm_layer(inter_channel),
             )
+            self.down_channel_v2l_hsv = nn.Sequential(
+                nn.Conv2d(in_channels=in_channels,
+                          out_channels=inter_channel,
+                          kernel_size=1, padding=0, bias=False),
+                norm_layer(inter_channel),
+            )
+
 
         elif mode == 'symmetric':
             self.down_channel = nn.Sequential(
@@ -85,19 +92,21 @@ class LatentGNNV1(nn.Module):
         # Residual Connection
         self.gamma = nn.Parameter(torch.zeros(1))
 
-    def forward(self, conv_feature):
+    def forward(self, conv_feature, hsv_feature):
         # Generate visible space feature
         if self.mode == 'asymmetric':
             v2l_conv_feature = self.down_channel_v2l(conv_feature)
             l2v_conv_feature = self.down_channel_l2v(conv_feature)
+            v2l_hsv_feature = self.down_channel_v2l_hsv(hsv_feature)
             v2l_conv_feature = self.norm_func(v2l_conv_feature, dim=1)
             l2v_conv_feature = self.norm_func(l2v_conv_feature, dim=1)
+            v2l_hsv_feature = self.norm_func(v2l_hsv_feature, dim=1)
         elif self.mode == 'symmetric':
             v2l_conv_feature = self.norm_func(self.down_channel(conv_feature), dim=1)
             l2v_conv_feature = None
         out_features = []
         for i in range(self.num_kernels):
-            out_features.append(eval('self.LatentGNN_Kernel_{}'.format(i))(v2l_conv_feature, l2v_conv_feature))
+            out_features.append(eval('self.LatentGNN_Kernel_{}'.format(i))(v2l_conv_feature, l2v_conv_feature, v2l_hsv_feature))
 
         out_features = torch.cat(out_features, dim=1) if self.num_kernels > 1 else out_features[0]
 
@@ -129,6 +138,14 @@ class LatentGNN_Kernel(nn.Module):
 
         if mode == 'asymmetric':
             self.psi_v2l = nn.Sequential(
+                nn.Conv2d(in_channels=in_channels,
+                          out_channels=latent_dim,
+                          kernel_size=1, padding=0,
+                          bias=False),
+                norm_layer(latent_dim),
+                nn.ReLU(inplace=True),
+            )
+            self.psi_v2l_hsv = nn.Sequential(
                 nn.Conv2d(in_channels=in_channels,
                           out_channels=latent_dim,
                           kernel_size=1, padding=0,
@@ -170,14 +187,16 @@ class LatentGNN_Kernel(nn.Module):
             )
             nn.init.normal_(self.GraphConvWeight[0].weight, std=0.01)
 
-    def forward(self, v2l_conv_feature, l2v_conv_feature):
+    def forward(self, v2l_conv_feature, l2v_conv_feature, v2l_hsv_feature):
         B, C, H, W = v2l_conv_feature.shape
 
         # Generate Bipartite Graph Adjacency Matrix
         if self.mode == 'asymmetric':
             v2l_graph_adj = self.psi_v2l(v2l_conv_feature)
             l2v_graph_adj = self.psi_l2v(l2v_conv_feature)
+            v2l_graph_adj_hsv = self.psi_v2l_hsv(v2l_hsv_feature)
             v2l_graph_adj = self.norm_func(v2l_graph_adj.view(B, -1, H * W), dim=2)
+            v2l_graph_adj_hsv = self.norm_func(v2l_graph_adj_hsv.view(B, -1, H * W), dim=2)
             l2v_graph_adj = self.norm_func(l2v_graph_adj.view(B, -1, H * W), dim=1)
             # l2v_graph_adj = self.norm_func(l2v_graph_adj.view(B,-1, H*W), dim=2)
         elif self.mode == 'symmetric':
@@ -188,16 +207,19 @@ class LatentGNN_Kernel(nn.Module):
         # Step1 : Visible-to-Latent
         # ----------------------------------------------
         latent_node_feature = torch.bmm(v2l_graph_adj, v2l_conv_feature.view(B, -1, H * W).permute(0, 2, 1))
+        latent_node_feature_hsv = torch.bmm(v2l_graph_adj_hsv, v2l_hsv_feature.view(B, -1, H * W).permute(0, 2, 1))
 
         # ----------------------------------------------
         # Step2 : Latent-to-Latent
         # ----------------------------------------------
         # Generate Dense-connected Graph Adjacency Matrix
         latent_node_feature_n = self.norm_func(latent_node_feature, dim=-1)
-        affinity_matrix = torch.bmm(latent_node_feature_n, latent_node_feature_n.permute(0, 2, 1))
+        latent_node_feature_hsv_n = self.norm_func(latent_node_feature_hsv, dim=-1)
+        affinity_matrix = torch.bmm(latent_node_feature_n, latent_node_feature_hsv_n.permute(0, 2, 1))
         affinity_matrix = F.softmax(affinity_matrix, dim=-1)
 
         latent_node_feature = torch.bmm(affinity_matrix, latent_node_feature)
+        latent_node_feature = latent_node_feature + latent_node_feature_hsv
 
         # ----------------------------------------------
         # Step3: Latent-to-Visible
@@ -210,13 +232,14 @@ class LatentGNN_Kernel(nn.Module):
         return visible_feature
 
 if __name__ == "__main__":
-    network = LatentGNNV1(in_channels=256,
+    network = LatentGNNV1_hsv(in_channels=256,
                           latent_dims=[100, 100],
                           channel_stride=8,
                           num_kernels=2,
                           mode='asymmetric',
                           graph_conv_flag=False)
     dump_inputs = torch.rand((2, 256, 30, 30))
+    hsv_inputs = torch.rand((2, 256, 30, 30))
     print(str(network))
-    output = network(dump_inputs)
+    output = network(dump_inputs,hsv_inputs)
     print(output.shape)

@@ -1,12 +1,13 @@
 import cv2
 import numpy as np
-ind = 'P00598'
+# ind = 'P00598'
 # ind = 'P08341'
 # ind = 'P05691'
 # ind = 'P08701'
 # ind = 'P07687'
 # ind = 'P00887'
 # ind = 'P01257'
+ind = 'P07348'
 img = cv2.imread(f'/home/xray/LXM/mmdetection/demo/{ind}.jpg')
 # B, G, R = cv2.split(img)  # 分离出图片的B，R，G颜色通道
 # cv2.imwrite("/home/xray/LXM/mmdetection/demo/006619401009995_RED.jpg", R) # 显示三通道的值都为R值时d图片

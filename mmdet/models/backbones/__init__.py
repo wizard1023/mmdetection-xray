@@ -54,12 +54,28 @@ from .resnet_density_cat import ResNet_Density_cat
 from .resnet_density_add import ResNet_Density_add
 from .resnet_hsv_cat import ResNet_hsv_cat
 from .resnet_density import ResNet_Density
+from .resnet_density_1 import ResNet_Density_1
+from .resnet_density_2 import ResNet_Density_2
+from .resnet_density_3 import ResNet_Density_3
 from .resnet_multiscale import ResNet_Multiscale
 from .resnet_multiscale_1 import ResNet_Multiscale_1
 from .resnet_multiscale_2 import ResNet_Multiscale_2
 from .resnet_multiscale_3 import ResNet_Multiscale_3
 from .resnet_multiscale_4 import ResNet_Multiscale_4
 from .resnet_multiscale_5 import ResNet_Multiscale_5
+from .resnet_multiscale_6 import ResNet_Multiscale_6
+from .resnet_multiscale_7 import ResNet_Multiscale_7
+from .resnet_multiscale_8 import ResNet_Multiscale_8
+from .resnet_multiscale_9 import ResNet_Multiscale_9
+from .resnet_multiscale_10 import ResNet_Multiscale_10
+from .resnet_multiscale_11 import ResNet_Multiscale_11
+from .resnet_multiscale_12 import ResNet_Multiscale_12
+from .resnet_multiscale_13 import ResNet_Multiscale_13
+from .resnet_multiscale_14 import ResNet_Multiscale_14
+from .resnet_multiscale_15 import ResNet_Multiscale_15
+from .resnet_multiscale_16 import ResNet_Multiscale_16
+from .resnet_multiscale_17 import ResNet_Multiscale_17
+
 __all__ = [
     'RegNet', 'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet',
     'MobileNetV2', 'Res2Net', 'HourglassNet', 'DetectoRS_ResNet',
@@ -69,9 +85,11 @@ __all__ = [
     'ResNet_GloRe','GloRe_Unit_2D','ResNet_LatenGNN','ResNet_Edge','ResNet_Edge_cbam','ResNet_Edge_gcnet','ResNet_Edge_nonlocal',
     'ResNet_Edge_senet',
     'ResNet_Density_cat','ResNet_Density_add','ResNet_hsv_cat',
-    'ResNet_Density',
+    'ResNet_Density','ResNet_Density_1','ResNet_Density_2','ResNet_Density_3',
     'ResNet_Multiscale','ResNet_Multiscale_1','ResNet_Multiscale_2','ResNet_Multiscale_3','ResNet_Multiscale_4',
-    'ResNet_Multiscale_5',
+    'ResNet_Multiscale_5','ResNet_Multiscale_6','ResNet_Multiscale_7','ResNet_Multiscale_8','ResNet_Multiscale_9',
+    'ResNet_Multiscale_10','ResNet_Multiscale_11','ResNet_Multiscale_12','ResNet_Multiscale_13','ResNet_Multiscale_14',
+    'ResNet_Multiscale_15','ResNet_Multiscale_16','ResNet_Multiscale_17',
     'SSDVGG_DOAM','DOAM','ResNet_Material','ResNet_Edge_Material','ResNet_Edge_Material_1',
     'ResNet_Edge_Material_8','ResNet_Edge_Material_9',
     'ResNet_Material_1','ResNet_Material_2','ResNet_Material_3',
