@@ -10,7 +10,7 @@ from .base_roi_extractor import BaseRoIExtractor
 
 
 @MODELS.register_module()
-class SingleRoIExtractor(BaseRoIExtractor):
+class SingleRoIExtractor_SGNN(BaseRoIExtractor):
     """Extract RoI features from a single level feature map.
 
     If there are multiple input feature levels, each RoI is mapped to a level
@@ -61,6 +61,27 @@ class SingleRoIExtractor(BaseRoIExtractor):
         target_lvls = torch.floor(torch.log2(scale / self.finest_scale + 1e-6))
         target_lvls = target_lvls.clamp(min=0, max=num_levels - 1).long()
         return target_lvls
+
+
+    def roi_relation(self, roi_feats):
+        num_rois = roi_feats.shape[0]
+        roi_feats_flatten = roi_feats.view(roi_feats.size(0),-1)
+        eps = torch.mm(roi_feats_flatten, roi_feats_flatten.t())
+        _, indices = torch.topk(eps, k=32, dim=0)
+        relation = torch.empty(2, 32 * num_rois, dtype=torch.long).to(self._device)
+        relation[0] = torch.Tensor(list(range(num_rois)) * 32)  # , type=torch.long)
+        relation[1] = indices.view(-1)
+        return relation
+
+    def roi_visual_embdedding(self, roi_feats, rois):
+        pass
+
+    def roi_distance(self, rois):
+        pass
+
+    def sgnn(self, visual_embedding, relation, U):
+        pass
+
 
     def forward(self,
                 feats: Tuple[Tensor],
@@ -121,5 +142,22 @@ class SingleRoIExtractor(BaseRoIExtractor):
                     x.view(-1)[0]
                     for x in self.parameters()) * 0. + feats[i].sum() * 0.
         # print(f'roi_feats shape:{roi_feats.shape}') # [2048,256,7,7],[2039,256,7,7],[2043,256,7,7]...
-        # print(f'the 0 dim of roi_feats:{roi_feats[0]}')
+        print(f'the 0 dim of roi_feats:{roi_feats[0]}')
+        # step1: 计算roi之间的关系矩阵作为邻接矩阵
+        relation = self.roi_relation(roi_feats)
+        # step2: 计算roi的visual embedding
+        visual_embedding = self.roi_visual_embdedding(roi_feats, rois)
+        # step3: 计算roi之间的距离和角度
+        U = self.roi_distance(rois)
+        # step4: 图推理
+        f = self.sgnn(visual_embedding, relation, U)
+        # step5: 与原始的roi_feat拼接
+        roi_feats_new = torch.cat((roi_feats, f), dim=1)
+
         return roi_feats
+
+if __name__=='__main__':
+    roi_feats = torch.randn(4, 2, 3, 3)
+    rois = torch.tensor([[0,1,1,1,1],[0,2,2,2,2],[1,3,3,3,3],[1,4,4,4,4]])
+
+    inner_product_matrix = (roi_feats, rois)

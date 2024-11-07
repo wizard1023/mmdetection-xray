@@ -537,6 +537,9 @@ class CascadeRoIHead(BaseRoIHead):
             tuple: A tuple of features from ``bbox_head`` and ``mask_head``
             forward.
         """
+        # print(f'cascade_roi_head input_x shape:{x[0]}')
+        # print(f'cascade_roi_head input_rpn_results_list shape:{rpn_results_list[0]}')
+        # print(f'cascade_roi_head input_batch_data_samples shape:{batch_data_samples[0]}')
         results = ()
         batch_img_metas = [
             data_samples.metainfo for data_samples in batch_data_samples

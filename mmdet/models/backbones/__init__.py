@@ -75,6 +75,12 @@ from .resnet_multiscale_14 import ResNet_Multiscale_14
 from .resnet_multiscale_15 import ResNet_Multiscale_15
 from .resnet_multiscale_16 import ResNet_Multiscale_16
 from .resnet_multiscale_17 import ResNet_Multiscale_17
+from .resnet_multiscale_18 import ResNet_Multiscale_18
+from .resnet_multiscale_19 import ResNet_Multiscale_19
+from .resnet_multiscale_20 import ResNet_Multiscale_20
+from .resnet_edge_multiscale_14_density_3 import ResNet_Edge_Multiscale_14_Density_3
+from .resnet_edge_density_3_multiscale_14 import ResNet_Edge_Density_3_Multiscale_14
+from .resnet_edge_density_3_multiscale_14_50 import ResNet_Edge_Density_3_Multiscale_14_50
 
 __all__ = [
     'RegNet', 'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet',
@@ -89,7 +95,9 @@ __all__ = [
     'ResNet_Multiscale','ResNet_Multiscale_1','ResNet_Multiscale_2','ResNet_Multiscale_3','ResNet_Multiscale_4',
     'ResNet_Multiscale_5','ResNet_Multiscale_6','ResNet_Multiscale_7','ResNet_Multiscale_8','ResNet_Multiscale_9',
     'ResNet_Multiscale_10','ResNet_Multiscale_11','ResNet_Multiscale_12','ResNet_Multiscale_13','ResNet_Multiscale_14',
-    'ResNet_Multiscale_15','ResNet_Multiscale_16','ResNet_Multiscale_17',
+    'ResNet_Multiscale_15','ResNet_Multiscale_16','ResNet_Multiscale_17','ResNet_Multiscale_18','ResNet_Multiscale_19',
+    'ResNet_Multiscale_20',
+    'ResNet_Edge_Multiscale_14_Density_3','ResNet_Edge_Density_3_Multiscale_14','ResNet_Edge_Density_3_Multiscale_14_50',
     'SSDVGG_DOAM','DOAM','ResNet_Material','ResNet_Edge_Material','ResNet_Edge_Material_1',
     'ResNet_Edge_Material_8','ResNet_Edge_Material_9',
     'ResNet_Material_1','ResNet_Material_2','ResNet_Material_3',

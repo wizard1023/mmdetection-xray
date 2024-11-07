@@ -84,7 +84,7 @@ if __name__ == "__main__":
            torch.rand(1,512,80,80).to("cuda:0"),
            torch.rand(1,1024,40,40).to("cuda:0"),
            torch.rand(1,2048,20,20).to("cuda:0")]
-    model = Edge_Guidance_150().to("cuda:0")
+    model = Edge_Guidance_50().to("cuda:0")
     outs = model(img,feat)
     # edge_detect = edge_detect.squeeze(0).cpu().numpy()
     # image = np.transpose(edge_detect, (1, 2, 0))

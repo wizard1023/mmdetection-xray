@@ -90,6 +90,7 @@ class RPNHead(AnchorHead):
                 bbox_pred (Tensor): Box energies / deltas for a single scale \
                     level, the channels number is num_base_priors * 4.
         """
+        # print(f'input of rpn_head:{x.shape}') #[4,256,232,200],[4,256,116.100],[4,256,58,50]...
         x = self.rpn_conv(x)
         x = F.relu(x)
         rpn_cls_score = self.rpn_cls(x)
