@@ -81,7 +81,8 @@ from .resnet_multiscale_20 import ResNet_Multiscale_20
 from .resnet_edge_multiscale_14_density_3 import ResNet_Edge_Multiscale_14_Density_3
 from .resnet_edge_density_3_multiscale_14 import ResNet_Edge_Density_3_Multiscale_14
 from .resnet_edge_density_3_multiscale_14_50 import ResNet_Edge_Density_3_Multiscale_14_50
-
+from .resnet_edge_density_3_multiscale_14_150 import ResNet_Edge_Density_3_Multiscale_14_150
+from .resnet_edge_density_3_multiscale_14_200 import ResNet_Edge_Density_3_Multiscale_14_200
 __all__ = [
     'RegNet', 'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet',
     'MobileNetV2', 'Res2Net', 'HourglassNet', 'DetectoRS_ResNet',
@@ -98,6 +99,7 @@ __all__ = [
     'ResNet_Multiscale_15','ResNet_Multiscale_16','ResNet_Multiscale_17','ResNet_Multiscale_18','ResNet_Multiscale_19',
     'ResNet_Multiscale_20',
     'ResNet_Edge_Multiscale_14_Density_3','ResNet_Edge_Density_3_Multiscale_14','ResNet_Edge_Density_3_Multiscale_14_50',
+    'ResNet_Edge_Density_3_Multiscale_14_150','ResNet_Edge_Density_3_Multiscale_14_200',
     'SSDVGG_DOAM','DOAM','ResNet_Material','ResNet_Edge_Material','ResNet_Edge_Material_1',
     'ResNet_Edge_Material_8','ResNet_Edge_Material_9',
     'ResNet_Material_1','ResNet_Material_2','ResNet_Material_3',
